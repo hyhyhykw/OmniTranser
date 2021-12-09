@@ -1,0 +1,4 @@
+rootProject.name = "OmniTransaction"
+include ':app'
+include ':core'
+include ':bitcoin'
