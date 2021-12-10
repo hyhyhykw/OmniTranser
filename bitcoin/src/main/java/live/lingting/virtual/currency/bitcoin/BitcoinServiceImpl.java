@@ -423,11 +423,13 @@ public class BitcoinServiceImpl implements PlatformService<BitcoinTransactionGen
 				Script redeemScript = ScriptBuilder.createP2WPKHOutputScript(key);
 				Script witnessScript = ScriptBuilder.createP2PKHOutputScript(key);
 
-				TransactionSignature signature = tx.calculateWitnessSignature(inputIndex, key, witnessScript,
+				TransactionSignature signature = tx.calculateWitnessSignature(inputIndex,
+						key,
+						witnessScript,
 						txIn.getValue(), SigHash.ALL, false);
 
 				txIn.setWitness(TransactionWitness.redeemP2WPKH(signature, key));
-				txIn.setScriptSig(new ScriptBuilder().data(redeemScript.getProgram()).build());
+//				txIn.setScriptSig(new ScriptBuilder().data(redeemScript.getProgram()).build());
 				continue;
 			}
 
