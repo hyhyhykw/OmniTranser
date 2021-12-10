@@ -339,7 +339,11 @@ public class BitcoinServiceImpl implements PlatformService<BitcoinTransactionGen
 			TransactionOutPoint outPoint = new TransactionOutPoint(np, spent.getOut(),
 					Sha256Hash.wrap(spent.getHash()));
 
-			TransactionInput input = new TransactionInput(np, tx, Hex.decode(spent.getScript()), outPoint,
+
+			TransactionInput input = new TransactionInput(np, tx,
+//					Hex.decode(spent.getScript())
+					ScriptBuilder.createEmpty().getProgram()
+					, outPoint,
 					Coin.valueOf(spent.getValue().longValue()));
 			tx.addInput(input);
 		}
@@ -429,7 +433,7 @@ public class BitcoinServiceImpl implements PlatformService<BitcoinTransactionGen
 						txIn.getValue(), SigHash.ALL, false);
 
 				txIn.setWitness(TransactionWitness.redeemP2WPKH(signature, key));
-//				txIn.setScriptSig(new ScriptBuilder().data(redeemScript.getProgram()).build());
+				txIn.setScriptSig(new ScriptBuilder().data(redeemScript.getProgram()).build());
 				continue;
 			}
 
