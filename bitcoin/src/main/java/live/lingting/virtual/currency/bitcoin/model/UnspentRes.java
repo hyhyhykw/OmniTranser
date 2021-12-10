@@ -34,7 +34,7 @@ public abstract class UnspentRes {
 		boolean isSochain = bitcoinEndpoints == BitcoinEndpoints.TEST;
 
 		Endpoints endpoints = !isSochain ? BlockchainEndpoints.MAINNET :
-				BitcoinSochainEndpoints.TEST;
+				BlockchainEndpoints.TEST;
 
 		HttpRequest request;
 		// sochain 节点处理
