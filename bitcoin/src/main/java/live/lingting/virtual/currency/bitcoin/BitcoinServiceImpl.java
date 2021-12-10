@@ -427,7 +427,7 @@ public class BitcoinServiceImpl implements PlatformService<BitcoinTransactionGen
 
 				TransactionSignature signature = tx.calculateWitnessSignature(inputIndex,
 						key,
-						witnessScript,
+						script,
 						txIn.getValue(), SigHash.ALL, false);
 
 				txIn.setScriptSig(ScriptBuilder.createInputScript(signature));
