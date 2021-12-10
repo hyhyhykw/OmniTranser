@@ -35,6 +35,7 @@ import org.bitcoinj.core.SignatureDecodeException;
 import org.bitcoinj.core.TransactionConfidence;
 import org.bitcoinj.core.TransactionInput;
 import org.bitcoinj.core.TransactionOutPoint;
+import org.bitcoinj.core.TransactionOutput;
 import org.bitcoinj.core.TransactionWitness;
 import org.bitcoinj.core.Utils;
 import org.bitcoinj.crypto.TransactionSignature;
@@ -427,13 +428,11 @@ public class BitcoinServiceImpl implements PlatformService<BitcoinTransactionGen
 
 				TransactionSignature signature = tx.calculateWitnessSignature(inputIndex,
 						key,
-						script,
+						witnessScript,
 						txIn.getValue(), SigHash.ALL, false);
 
-				txIn.setScriptSig(ScriptBuilder.createInputScript(signature));
-				txIn.setWitness(null);
-//				txIn.setWitness(TransactionWitness.redeemP2WPKH(signature, key));
-//				txIn.setScriptSig(new ScriptBuilder().data(redeemScript.getProgram()).build());
+				txIn.setWitness(TransactionWitness.redeemP2WPKH(signature, key));
+				txIn.setScriptSig(new ScriptBuilder().data(redeemScript.getProgram()).build());
 				continue;
 			}
 
