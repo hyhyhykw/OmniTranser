@@ -7,7 +7,6 @@ import java.util.List;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import live.lingting.virtual.currency.bitcoin.endpoints.BitcoinEndpoints;
-import live.lingting.virtual.currency.bitcoin.endpoints.BitcoinSochainEndpoints;
 import live.lingting.virtual.currency.bitcoin.endpoints.BlockchainEndpoints;
 import live.lingting.virtual.currency.bitcoin.model.blockchain.BlockchainUnspentRes;
 import live.lingting.virtual.currency.core.Endpoints;
@@ -40,7 +39,10 @@ public abstract class UnspentRes {
 		// sochain 节点处理
 		request = HttpRequest.get(endpoints.getHttpUrl("addrs/"
 				// 地址
-				+ address+"?token=" +"5ed2381ec1ba4bb0a25f5f0a6bec8a10"+ "&unspentOnly=true&includeScript=true"
+				+ address+"?token=" +"5ed2381ec1ba4bb0a25f5f0a6bec8a10"
+				+ "&unspentOnly=true"
+				+ "&includeScript=true"
+				+ "&confirmations="+min
 
 		));
 

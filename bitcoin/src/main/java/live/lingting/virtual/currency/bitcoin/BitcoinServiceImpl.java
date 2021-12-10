@@ -1,5 +1,7 @@
 package live.lingting.virtual.currency.bitcoin;
 
+import android.util.Log;
+
 import static live.lingting.virtual.currency.bitcoin.util.BTCUtils.PROPERTY_PREFIX;
 import static org.bitcoinj.core.Transaction.Purpose;
 import static org.bitcoinj.core.Transaction.SigHash;
@@ -416,6 +418,7 @@ public class BitcoinServiceImpl implements PlatformService<BitcoinTransactionGen
 
 			// p2sh-p2wpkh
 			if (ScriptPattern.isP2SH(script)) {
+				Log.e("TAG","1111111111111111111");
 				// 脚本
 				Script redeemScript = ScriptBuilder.createP2WPKHOutputScript(key);
 				Script witnessScript = ScriptBuilder.createP2PKHOutputScript(key);
@@ -429,6 +432,7 @@ public class BitcoinServiceImpl implements PlatformService<BitcoinTransactionGen
 			}
 
 			if (ScriptPattern.isP2WPKH(script)) {
+				Log.e("TAG","222222222222222222222");
 				script = ScriptBuilder.createP2PKHOutputScript(key);
 				TransactionSignature signature = tx.calculateWitnessSignature(inputIndex, key, script, txIn.getValue(),
 						SigHash.ALL, false);
@@ -437,6 +441,7 @@ public class BitcoinServiceImpl implements PlatformService<BitcoinTransactionGen
 				continue;
 			}
 
+			Log.e("TAG","3333333333333333333");
 			TransactionSignature txSignature = tx.calculateSignature(inputIndex, key, script, SigHash.ALL, false);
 
 			if (ScriptPattern.isP2PK(script)) {
