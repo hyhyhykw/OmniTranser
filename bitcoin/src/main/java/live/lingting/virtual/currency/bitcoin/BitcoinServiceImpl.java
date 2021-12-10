@@ -341,8 +341,7 @@ public class BitcoinServiceImpl implements PlatformService<BitcoinTransactionGen
 
 
 			TransactionInput input = new TransactionInput(np, tx,
-//					Hex.decode(spent.getScript())
-					ScriptBuilder.createEmpty().getProgram()
+					Hex.decode(spent.getScript())
 					, outPoint,
 					Coin.valueOf(spent.getValue().longValue()));
 			tx.addInput(input);
@@ -422,7 +421,6 @@ public class BitcoinServiceImpl implements PlatformService<BitcoinTransactionGen
 
 			// p2sh-p2wpkh
 			if (ScriptPattern.isP2SH(script)) {
-				Log.e("TAG","1111111111111111111");
 				// 脚本
 				Script redeemScript = ScriptBuilder.createP2WPKHOutputScript(key);
 				Script witnessScript = ScriptBuilder.createP2PKHOutputScript(key);
@@ -432,13 +430,14 @@ public class BitcoinServiceImpl implements PlatformService<BitcoinTransactionGen
 						witnessScript,
 						txIn.getValue(), SigHash.ALL, false);
 
-				txIn.setWitness(TransactionWitness.redeemP2WPKH(signature, key));
-				txIn.setScriptSig(new ScriptBuilder().data(redeemScript.getProgram()).build());
+				txIn.setScriptSig(ScriptBuilder.createInputScript(signature));
+				txIn.setWitness(null);
+//				txIn.setWitness(TransactionWitness.redeemP2WPKH(signature, key));
+//				txIn.setScriptSig(new ScriptBuilder().data(redeemScript.getProgram()).build());
 				continue;
 			}
 
 			if (ScriptPattern.isP2WPKH(script)) {
-				Log.e("TAG","222222222222222222222");
 				script = ScriptBuilder.createP2PKHOutputScript(key);
 				TransactionSignature signature = tx.calculateWitnessSignature(inputIndex, key, script, txIn.getValue(),
 						SigHash.ALL, false);
@@ -447,7 +446,6 @@ public class BitcoinServiceImpl implements PlatformService<BitcoinTransactionGen
 				continue;
 			}
 
-			Log.e("TAG","3333333333333333333");
 			TransactionSignature txSignature = tx.calculateSignature(inputIndex, key, script, SigHash.ALL, false);
 
 			if (ScriptPattern.isP2PK(script)) {
