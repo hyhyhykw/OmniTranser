@@ -28,7 +28,7 @@ public class BlockchainUnspentRes extends UnspentRes {
 	@JsonProperty("notice")
 	private String notice;
 
-	@JsonProperty("unspent_outputs")
+	@JsonProperty("txrefs")
 	private List<BlockchainUnspent> unspentList;
 
 	@Override
@@ -39,7 +39,9 @@ public class BlockchainUnspentRes extends UnspentRes {
 		List<Unspent> list = new ArrayList<>(unspentList.size());
 
 		for (BlockchainUnspent un : unspentList) {
-			list.add(new Unspent().setHash(un.txHashBigEndian).setConfirmations(un.confirmations).setOut(un.txOutputN)
+			list.add(new Unspent().setHash(un.txHash)
+					.setConfirmations(un.confirmations)
+					.setOut(un.txOutputN)
 					.setScript(un.script).setValue(un.value));
 		}
 
@@ -53,12 +55,6 @@ public class BlockchainUnspentRes extends UnspentRes {
 		@JsonProperty("tx_hash")
 		private String txHash;
 
-		/**
-		 * tx id
-		 */
-		@JsonProperty("tx_hash_big_endian")
-		private String txHashBigEndian;
-
 		@JsonProperty("tx_output_n")
 		private Long txOutputN;
 
@@ -71,18 +67,9 @@ public class BlockchainUnspentRes extends UnspentRes {
 		@JsonProperty("value")
 		private BigInteger value;
 
-		@JsonProperty("value_hex")
-		private String valueHex;
-
 		@JsonProperty("confirmations")
 		private BigInteger confirmations;
 
-		@JsonProperty("tx_index")
-		private BigInteger txIndex;
-
-		public String getTxId() {
-			return txHashBigEndian;
-		}
 
 	}
 

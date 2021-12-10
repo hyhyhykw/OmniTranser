@@ -10,7 +10,6 @@ import live.lingting.virtual.currency.bitcoin.endpoints.BitcoinEndpoints;
 import live.lingting.virtual.currency.bitcoin.endpoints.BitcoinSochainEndpoints;
 import live.lingting.virtual.currency.bitcoin.endpoints.BlockchainEndpoints;
 import live.lingting.virtual.currency.bitcoin.model.blockchain.BlockchainUnspentRes;
-import live.lingting.virtual.currency.bitcoin.model.sochain.SochainUnspentRes;
 import live.lingting.virtual.currency.core.Endpoints;
 import live.lingting.virtual.currency.core.util.JacksonUtils;
 
@@ -34,32 +33,18 @@ public abstract class UnspentRes {
 		// 测试节点使用 sochain
 		boolean isSochain = bitcoinEndpoints == BitcoinEndpoints.TEST;
 
-		Endpoints endpoints = !isSochain ? BlockchainEndpoints.MAINNET : BitcoinSochainEndpoints.TEST;
+		Endpoints endpoints = !isSochain ? BlockchainEndpoints.MAINNET :
+				BitcoinSochainEndpoints.TEST;
 
 		HttpRequest request;
 		// sochain 节点处理
-		if (isSochain) {
-			request = HttpRequest.get(endpoints.getHttpUrl("v2/get_tx_unspent/"
-					// 网络 BTC
-					+ ("BTCTEST/")
-					// 地址
-					+ address
+		request = HttpRequest.get(endpoints.getHttpUrl("addrs/"
+				// 地址
+				+ address+"?token=" +"5ed2381ec1ba4bb0a25f5f0a6bec8a10"+ "&unspentOnly=true&includeScript=true"
 
-			));
-		}
-		else {
-			request = HttpRequest.get(endpoints.getHttpUrl("unspent?confirmations=" + min + "&active=" + address));
-		}
+		));
 
 		String response = request.execute().body();
-
-		// sochain 节点处理
-		if (isSochain) {
-			if (response.contains(SochainUnspentRes.FAIL)) {
-				return new SochainUnspentRes();
-			}
-			return JacksonUtils.toObj(response, SochainUnspentRes.class);
-		}
 
 		if (response.equals(BlockchainUnspentRes.ERROR)) {
 			return new BlockchainUnspentRes().setUnspentList(new ArrayList<>());
